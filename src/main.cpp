@@ -26,10 +26,11 @@ void draw_pendulum(Vector2 startPos, float phi1 = (90 * DEG2RAD),
   DrawCircle(ps1.endPos.x, ps1.endPos.y, 10, RED);
   DrawCircle(ps2.endPos.x, ps2.endPos.y, 10, RED);
 }
-
 int main() {
 
   InitWindow(WIDTH, HEIGHT, "Double Pendulum");
+
+  SetTargetFPS(60);
 
   while (!WindowShouldClose()) {
     BeginDrawing();
