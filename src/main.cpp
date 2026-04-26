@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <random>
 #include <raylib.h>
 #include <vector>
 
@@ -91,8 +92,16 @@ void init_variables() {
   l1 = L1;
   l2 = L2;
 
-  phi1 = -90 * DEG2RAD;
-  phi2 = 90 * DEG2RAD;
+  std::random_device rd;
+  std::mt19937 gen(rd());
+
+  std::uniform_int_distribution<> dist(-90, 90);
+
+  float randPhi1{static_cast<float>(dist(gen)) * DEG2RAD};
+  float randPhi2{static_cast<float>(dist(gen)) * DEG2RAD};
+
+  phi1 = randPhi1;
+  phi2 = randPhi2;
 
   d_phi1 = 0;
   d_phi2 = 0;
