@@ -37,24 +37,31 @@ void draw_pendulum(Vector2 startPos, float phi1 = (90 * DEG2RAD),
 }
 
 void step() {
+  // lower time step
+  float dt = 1.0f;
+
   dd_phi1 = (-GRAVITY * (2 * m1 + m2) * std::sinf(phi1) -
-             (m2 * GRAVITY * std::sinf(phi1 - 2 * phi2) -
-              2 * std::sinf(phi1 - phi2) * m2 *
-                  (std::pow(d_phi2, 2) * l2 +
-                   std::pow(d_phi1, 2) * l1 * std::cosf(phi1 - phi2)))) /
+             m2 * GRAVITY * std::sinf(phi1 - 2 * phi2) -
+             2 * std::sinf(phi1 - phi2) * m2 *
+                 (std::pow(d_phi2, 2) * l2 +
+                  std::pow(d_phi1, 2) * l1 * std::cosf(phi1 - phi2))) /
             (l1 * (2 * m1 + m2 - m2 * std::cosf(2 * phi1 - 2 * phi2)));
 
-  dd_phi2 = (2 * std::sinf(phi1 - phi2) *
-             (std::pow(d_phi1, 2) * l1 * (m1 + m2) +
-              GRAVITY * (m1 + m2) * std::cosf(phi1) +
-              std::pow(d_phi2, 2) * l2 * m2 * std::cosf(phi1 - phi2))) /
+  dd_phi2 = 2 * std::sinf(phi1 - phi2) *
+            (std::pow(d_phi1, 2) * l1 * (m1 + m2) +
+             GRAVITY * (m1 + m2) * std::cosf(phi1) +
+             std::pow(d_phi2, 2) * l2 * m2 * std::cosf(phi1 - phi2)) /
             (l2 * (2 * m1 + m2 - m2 * std::cosf(2 * phi1 - 2 * phi2)));
 
-  d_phi1 += dd_phi1;
-  d_phi2 += dd_phi2;
+  d_phi1 += dd_phi1 * dt;
+  d_phi2 += dd_phi2 * dt;
 
-  phi1 += d_phi1;
-  phi2 += d_phi2;
+  phi1 += d_phi1 * dt;
+  phi2 += d_phi2 * dt;
+
+  // dampen
+  d_phi1 *= 0.999f;
+  d_phi2 *= 0.999f;
 }
 
 void init_variables() {
