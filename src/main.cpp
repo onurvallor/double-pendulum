@@ -4,6 +4,7 @@
 
 int WIDTH{500};
 int HEIGHT{500};
+int MASS_RADIUS{10};
 
 struct PendulumSection {
   Vector2 startPos;
@@ -23,9 +24,20 @@ void draw_pendulum(Vector2 startPos, float phi1 = (90 * DEG2RAD),
   DrawLineEx(ps1.startPos, ps1.endPos, 5.0f, WHITE);
   DrawLineEx(ps2.startPos, ps2.endPos, 5.0f, WHITE);
 
-  DrawCircle(ps1.endPos.x, ps1.endPos.y, 10, RED);
-  DrawCircle(ps2.endPos.x, ps2.endPos.y, 10, RED);
+  DrawCircle(ps1.endPos.x, ps1.endPos.y, MASS_RADIUS, RED);
+  DrawCircle(ps2.endPos.x, ps2.endPos.y, MASS_RADIUS, RED);
 }
+
+class PendulumValue {
+public:
+  PendulumValue();
+
+private:
+  float m_x{};
+  float m_y{};
+  float m_l{};
+};
+
 int main() {
 
   InitWindow(WIDTH, HEIGHT, "Double Pendulum");
