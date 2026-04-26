@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <raylib.h>
+#include <vector>
 
 int WIDTH{500};
 int HEIGHT{500};
@@ -13,10 +14,26 @@ float M2 = MASS_RADIUS;
 
 float m1, m2, l1, l2, phi1, phi2, d_phi1, d_phi2, dd_phi1, dd_phi2;
 
+std::vector<Vector2> path;
+
 struct PendulumSection {
   Vector2 startPos;
   Vector2 endPos;
 };
+
+void draw_path() {
+  for (auto point : path) {
+    // std::cout << point.x << ", " << point.y << "\n";
+    DrawCircle(point.x, point.y, 3.0f, GOLD);
+  }
+}
+
+void add_path(const Vector2 &point) {
+  path.insert(path.begin(), point);
+  if (path.size() > 100) {
+    path.pop_back();
+  }
+}
 
 void draw_pendulum(Vector2 startPos, float phi1 = (90 * DEG2RAD),
                    float phi2 = (90 * DEG2RAD), float l1 = 100.0f,
@@ -34,6 +51,9 @@ void draw_pendulum(Vector2 startPos, float phi1 = (90 * DEG2RAD),
 
   DrawCircle(ps1.endPos.x, ps1.endPos.y, MASS_RADIUS, RED);
   DrawCircle(ps2.endPos.x, ps2.endPos.y, MASS_RADIUS, RED);
+
+  add_path(Vector2{ps2.endPos.x, ps2.endPos.y});
+  // DrawCircle(ps2.endPos.x, ps2.endPos.y, 3.0f, PURPLE);
 }
 
 void step() {
@@ -91,7 +111,7 @@ int main() {
     ClearBackground(BLACK);
 
     step();
-
+    draw_path();
     draw_pendulum(Vector2{WIDTH / 2.0f, 0.0f}, phi1, phi2);
 
     EndDrawing();
